@@ -1,15 +1,19 @@
+#----------------------------IMPORTI------------------
 import sys
-
 import pygame
-
 import Buttons
 import credits_imena
 from imports import *
+
+#-----------------------------------------------------
+#----------------------OSNOVNE DEFINICJE----------------
 pygame.init()
 Xres = 800
 Yres = 600
 prozor = pygame.display.set_mode((Xres,Yres))
 sat = pygame.time.Clock()
+
+#*---------------------------GAME LOOPOVI---------------------
 def nacrtaj_dugme_bez_centiranja(dugme):
     pygame.draw.rect( prozor, dugme.boja, dugme.rect)
     prozor.blit(dugme.tekst, dugme.rect.topleft)  # lepsi nacin od linije dole, TOPLEFT je pozicija gornje leve tacke
@@ -62,7 +66,9 @@ def play():
 
 
 
+
         pygame.display.flip()
         sat.tick(30)
+#----------------------ZVANJE POCETNE FUNKCIJE
 main_menu()
 pygame.quit()
