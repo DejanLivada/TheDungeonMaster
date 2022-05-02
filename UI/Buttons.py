@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-
+pygame.init()
 dugme_font = pygame.font.SysFont('Consolas', 60)
 
 class Dugme():

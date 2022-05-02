@@ -1,5 +1,6 @@
 import pygame
-from credits_imena import *
+pygame.init()
+from Text_Files.credits_imena import *
 #----------------------FONTOVI---------------------------------
 credits_font = pygame.font.SysFont('Consolas', 30)
 

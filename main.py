@@ -1,9 +1,10 @@
 #----------------------------IMPORTI------------------
 import sys
+
 import pygame
-import Buttons
-import credits_imena
-from imports import *
+
+import Text_Files.texts
+from UI import Buttons
 
 #-----------------------------------------------------
 #----------------------OSNOVNE DEFINICJE----------------
@@ -35,7 +36,7 @@ def main_menu():
         prozor.fill((pygame.Color("cyan")))
         nacrtaj_dugme_bez_centiranja(Buttons.main_menu_dugme_quit)
         nacrtaj_dugme_bez_centiranja(Buttons.main_menu_dugme_credits)
-        nacrtaj_dugme_bez_centiranja(main_menu_play_button)
+        nacrtaj_dugme_bez_centiranja(Buttons.main_menu_play_button)
         pygame.display.flip()
         sat.tick(30)
 def credits():
@@ -49,10 +50,10 @@ def credits():
                 if Buttons.credits_to_main_menu_button.rect.collidepoint(dogadjaj.pos):
                     return
         prozor.fill((pygame.Color("cyan")))
-        prozor.blit(credits_text_developer  , (189, 132))
-        prozor.blit(credits_text_daniil , (189, 242))
-        prozor.blit(credits_text_tata, (189, 359))
-        nacrtaj_dugme_bez_centiranja(credits_to_main_menu_button)
+        prozor.blit(Text_Files.texts.credits_text_developer  , (189, 132))
+        prozor.blit(Text_Files.texts.credits_text_daniil , (189, 242))
+        prozor.blit(Text_Files.texts.credits_text_tata, (189, 359))
+        nacrtaj_dugme_bez_centiranja(Buttons.credits_to_main_menu_button)
         pygame.display.flip()
         sat.tick(30)
 def play():
@@ -69,6 +70,6 @@ def play():
 
         pygame.display.flip()
         sat.tick(30)
-#----------------------ZVANJE POCETNE FUNKCIJE
+#----------------------ZVANJE POCETNE FUNKCIJE-----------------
 main_menu()
 pygame.quit()
