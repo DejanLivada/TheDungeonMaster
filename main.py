@@ -36,6 +36,7 @@ def nacrtaj_dugme_bez_centiranja(dugme):
 
 
 def main_menu():
+    global trenutno_stanje
     program_radi = True
     while program_radi:
         for dogadjaj in pygame.event.get():
@@ -48,11 +49,19 @@ def main_menu():
                 if Buttons.main_menu_dugme_credits.rect.collidepoint(dogadjaj.pos):
                     credits()
                 if Buttons.main_menu_play_button.rect.collidepoint(dogadjaj.pos):
-                    if path.exists("Saves/player_name.pickle") and path.exists("Saves/trenutno_stanje.pickle"):
-                        play()
+                    if path.exists("Saves/trenutno_stanje.pickle"):
+                        with open("Saves/trenutno_stanje.pickle", "rb") as f:
+                            trenutno_stanje = pickle.load(f)
+                        if trenutno_stanje == "choose_character":
+                            choose_character()
+                        if trenutno_stanje == "choose_name":
+                            choose_name()
+                        if trenutno_stanje == "play":
+                            play()
                     else:
                         choose_name()
-        global trenutno_stanje
+
+
         trenutno_stanje = "main_menu"
 
         prozor.fill((pygame.Color("cyan")))
