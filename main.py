@@ -8,6 +8,7 @@ from UI import Buttons
 import player_pictures
 from os import path
 from Entity import player
+from Other.game_states import GameStates
 
 # -------------------------PLAYER SLIKE I DEFINISANJE PLAYERA------------------
 player_picture_1 = pygame.image.load("player_pictures/player1.png")
@@ -25,7 +26,7 @@ Xres = 800
 Yres = 600
 prozor = pygame.display.set_mode((Xres, Yres))
 sat = pygame.time.Clock()
-trenutno_stanje = ""
+trenutno_stanje = GameStates.DEFAULT
 
 # *---------------------------GAME LOOPOVI---------------------
 def nacrtaj_dugme_bez_centiranja(dugme):
@@ -52,17 +53,17 @@ def main_menu():
                     if path.exists("Saves/trenutno_stanje.pickle"):
                         with open("Saves/trenutno_stanje.pickle", "rb") as f:
                             trenutno_stanje = pickle.load(f)
-                        if trenutno_stanje == "choose_character":
+                        if trenutno_stanje == GameStates.CHOOSE_CHARACTER:
                             choose_character()
-                        if trenutno_stanje == "choose_name":
+                        if trenutno_stanje == GameStates.CHOOSE_NAME:
                             choose_name()
-                        if trenutno_stanje == "play":
+                        if trenutno_stanje == GameStates.PLAY:
                             play()
                     else:
                         choose_name()
 
 
-        trenutno_stanje = "main_menu"
+        trenutno_stanje = GameStates.DEFAULT
 
         prozor.fill((pygame.Color("cyan")))
         nacrtaj_dugme_bez_centiranja(Buttons.main_menu_dugme_quit)
@@ -80,7 +81,7 @@ def choose_character():
         prozor.fill((0,0,0))
         prozor.blit(player_picture_1 ,(96, 99) )
         global trenutno_stanje
-        trenutno_stanje = "choose_character"
+        trenutno_stanje = GameStates.CHOOSE_CHARACTER
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
             pickle.dump(trenutno_stanje, f)
 
@@ -112,7 +113,7 @@ def choose_name():
         text_surf = Text_Files.texts.choose_name_font.render(Text_Files.texts.player_name, True, (255, 255, 255))
         prozor.blit(text_surf, text_surf.get_rect(center=prozor.get_rect().center))
         global trenutno_stanje
-        trenutno_stanje = "choose_name"
+        trenutno_stanje = GameStates.CHOOSE_NAME
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
             pickle.dump(trenutno_stanje, f)
         sat.tick(30)
@@ -147,7 +148,7 @@ def play():
         prozor.fill((255, 255, 255))
         from Entity import player
         global trenutno_stanje
-        trenutno_stanje = "play"
+        trenutno_stanje = GameStates.PLAY
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
             pickle.dump(trenutno_stanje, f)
         pygame.display.flip()
