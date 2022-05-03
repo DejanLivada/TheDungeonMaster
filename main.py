@@ -5,17 +5,27 @@ import pygame
 import pickle
 import Text_Files.texts
 from UI import Buttons
-
+import player_pictures
 from os import path
+from Entity import player
 
-# -----------------------------------------------------
+# -------------------------PLAYER SLIKE I DEFINISANJE PLAYERA------------------
+player_picture_1 = pygame.image.load("player_pictures/player1.png")
+player_picture_1 = pygame.transform.scale(player_picture_1 , (100,100))
+
+igrac = player.Player(None , 100 , None)
+if path.exists("Saves/player_name.pickle"):
+    with open("Saves/player_name.pickle", "rb") as f:
+        igrac.name = pickle.load(f)
+else:
+    pass
 # ----------------------OSNOVNE DEFINICJE----------------
 pygame.init()
 Xres = 800
 Yres = 600
 prozor = pygame.display.set_mode((Xres, Yres))
 sat = pygame.time.Clock()
-
+trenutno_stanje = ""
 
 # *---------------------------GAME LOOPOVI---------------------
 def nacrtaj_dugme_bez_centiranja(dugme):
@@ -38,10 +48,12 @@ def main_menu():
                 if Buttons.main_menu_dugme_credits.rect.collidepoint(dogadjaj.pos):
                     credits()
                 if Buttons.main_menu_play_button.rect.collidepoint(dogadjaj.pos):
-                    if path.exists("player_data.pickle"):
+                    if path.exists("Saves/player_name.pickle") and path.exists("Saves/trenutno_stanje.pickle"):
                         play()
                     else:
                         choose_name()
+        global trenutno_stanje
+        trenutno_stanje = "main_menu"
 
         prozor.fill((pygame.Color("cyan")))
         nacrtaj_dugme_bez_centiranja(Buttons.main_menu_dugme_quit)
@@ -50,6 +62,21 @@ def main_menu():
         pygame.display.flip()
         sat.tick(30)
 
+def choose_character():
+    program_radi = True
+    while program_radi:
+        for dogadjaj in pygame.event.get():
+            if dogadjaj.type == pygame.QUIT:
+                sys.exit()
+        prozor.fill((0,0,0))
+        prozor.blit(player_picture_1 ,(96, 99) )
+        global trenutno_stanje
+        trenutno_stanje = "choose_character"
+        with open("Saves/trenutno_stanje.pickle", "wb") as f:
+            pickle.dump(trenutno_stanje, f)
+
+        pygame.display.flip()
+        sat.tick(30)
 
 def choose_name():
     program_radi = True
@@ -63,10 +90,10 @@ def choose_name():
             elif event.type == pygame.KEYDOWN and Text_Files.texts.choose_name_input_active:
                 if event.key == pygame.K_RETURN:
                     Text_Files.texts.choose_name_input_active = False
-                    with open("player_data.pickle", "wb") as f:
+                    with open("Saves/player_name.pickle", "wb") as f:
                         pickle.dump(Text_Files.texts.player_name, f)
 
-                    play()
+                    choose_character()
                 elif event.key == pygame.K_BACKSPACE:
                     Text_Files.texts.player_name = Text_Files.texts.player_name[:-1]
                 else:
@@ -75,6 +102,10 @@ def choose_name():
         prozor.blit(Text_Files.texts.choose_name_title, (100, 70))
         text_surf = Text_Files.texts.choose_name_font.render(Text_Files.texts.player_name, True, (255, 255, 255))
         prozor.blit(text_surf, text_surf.get_rect(center=prozor.get_rect().center))
+        global trenutno_stanje
+        trenutno_stanje = "choose_name"
+        with open("Saves/trenutno_stanje.pickle", "wb") as f:
+            pickle.dump(trenutno_stanje, f)
         sat.tick(30)
         pygame.display.flip()
 
@@ -88,6 +119,7 @@ def credits():
             if dogadjaj.type == pygame.MOUSEBUTTONDOWN:
                 if Buttons.credits_to_main_menu_button.rect.collidepoint(dogadjaj.pos):
                     return
+
         prozor.fill((pygame.Color("cyan")))
         prozor.blit(Text_Files.texts.credits_text_developer, (189, 132))
         prozor.blit(Text_Files.texts.credits_text_daniil, (189, 242))
@@ -104,8 +136,11 @@ def play():
             if dogadjaj.type == pygame.QUIT:
                 sys.exit()
         prozor.fill((255, 255, 255))
-
-
+        from Entity import player
+        global trenutno_stanje
+        trenutno_stanje = "play"
+        with open("Saves/trenutno_stanje.pickle", "wb") as f:
+            pickle.dump(trenutno_stanje, f)
         pygame.display.flip()
         sat.tick(30)
 
