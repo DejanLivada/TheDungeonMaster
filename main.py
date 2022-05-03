@@ -12,7 +12,11 @@ from Other.game_states import GameStates
 
 # -------------------------PLAYER SLIKE I DEFINISANJE PLAYERA------------------
 player_picture_1 = pygame.image.load("player_pictures/player1.png")
-player_picture_1 = pygame.transform.scale(player_picture_1 , (100,100))
+player_picture_1 = pygame.transform.scale(player_picture_1 , (200,200))
+player_picture_2 = pygame.image.load("player_pictures/player2.png")
+player_picture_2 = pygame.transform.smoothscale(player_picture_2 , (200,200))
+player_picture_3 = pygame.image.load("player_pictures/player3.jpg")
+player_picture_3 = pygame.transform.scale(player_picture_3 , (350,200))
 
 igrac = player.Player(None , 100 , None)
 if path.exists("Saves/player_name.pickle"):
@@ -79,7 +83,24 @@ def choose_character():
             if dogadjaj.type == pygame.QUIT:
                 sys.exit()
         prozor.fill((0,0,0))
-        prozor.blit(player_picture_1 ,(96, 99) )
+        prozor.blit(player_picture_1 ,(64, 99) )
+        prozor.blit(player_picture_2 , (300 , 85))
+        prozor.blit(player_picture_3 , (500 , 99))
+        prozor.blit(Text_Files.texts.character1_text , (100 , 50))
+        prozor.blit(Text_Files.texts.character2_text, (350, 50))
+        prozor.blit(Text_Files.texts.character3_text, (620, 50))
+        if player_picture_1.get_rect().collidepoint(pygame.mouse.get_pos()):
+            prozor.blit(Text_Files.texts.character1_stat_damage , (50 , 350))
+            prozor.blit(Text_Files.texts.character1_stat_defense, (50, 390))
+            prozor.blit(Text_Files.texts.character1_stat_stamina, (50, 430))
+        if player_picture_2.get_rect().collidepoint(pygame.mouse.get_pos()):
+            prozor.blit(Text_Files.texts.character2_stat_damage , (300 , 350))
+            prozor.blit(Text_Files.texts.character2_stat_defense, (300, 390))
+            prozor.blit(Text_Files.texts.character2_stat_stamina, (300, 430))
+        if player_picture_3.get_rect().collidepoint(pygame.mouse.get_pos()):
+            prozor.blit(Text_Files.texts.character3_stat_damage , (570 , 350))
+            prozor.blit(Text_Files.texts.character3_stat_defense, (570, 390))
+            prozor.blit(Text_Files.texts.character3_stat_stamina, (570, 430))
         global trenutno_stanje
         trenutno_stanje = GameStates.CHOOSE_CHARACTER
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
