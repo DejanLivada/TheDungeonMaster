@@ -3,7 +3,10 @@ import sys
 
 import pygame
 import pickle
+
+import Entity.player
 import Text_Files.texts
+import UI.Buttons
 from UI import Buttons
 import player_pictures
 from os import path
@@ -18,12 +21,24 @@ player_picture_2 = pygame.transform.smoothscale(player_picture_2 , (200,200))
 player_picture_3 = pygame.image.load("player_pictures/player3.jpg")
 player_picture_3 = pygame.transform.scale(player_picture_3 , (350,200))
 
-igrac = player.Player(None , 100 , None)
+igrac = Entity.player.Player(None , 100 , Entity.player.player_izabrana_slika)
 if path.exists("Saves/player_name.pickle"):
     with open("Saves/player_name.pickle", "rb") as f:
         igrac.name = pickle.load(f)
+
 else:
     pass
+if path.exists("Saves/player_picture.pickle"):
+    with open("Saves/player_picture.pickle", "rb") as f:
+        if Entity.player.player_izabrana_slika == "Knight":
+            igrac.slika = player_picture_1
+        if Entity.player.player_izabrana_slika == "Pirate":
+            igrac.slika = player_picture_2
+        if Entity.player.player_izabrana_slika == "Furry":
+            igrac.slika = player_picture_3
+else:
+    pass
+
 # ----------------------OSNOVNE DEFINICJE----------------
 pygame.init()
 Xres = 800
@@ -76,12 +91,31 @@ def main_menu():
         pygame.display.flip()
         sat.tick(30)
 
-def choose_character():
+def choose_character():                     #PLAYER CHOOSING HIS CHARACTER
     program_radi = True
     while program_radi:
         for dogadjaj in pygame.event.get():
             if dogadjaj.type == pygame.QUIT:
                 sys.exit()
+            if dogadjaj.type == pygame.MOUSEBUTTONDOWN:
+                if UI.Buttons.choose_player1.rect.collidepoint(dogadjaj.pos):
+                    igrac.slika = player_picture_1
+                    Entity.player.player_izabrana_slika = "Knight"
+                    with open("Saves/player_picture.pickle", "wb") as f:
+                        pickle.dump(Entity.player.player_izabrana_slika, f)
+                    play()
+                if UI.Buttons.choose_player2.rect.collidepoint(dogadjaj.pos):
+                    igrac.slika = player_picture_2
+                    Entity.player.player_izabrana_slika = "Pirate"
+                    with open("Saves/player_picture.pickle", "wb") as f:
+                        pickle.dump(Entity.player.player_izabrana_slika, f)
+                    play()
+                if UI.Buttons.choose_player3.rect.collidepoint(dogadjaj.pos):
+                    igrac.slika = player_picture_3
+                    Entity.player.player_izabrana_slika = "Furry"
+                    with open("Saves/player_picture.pickle", "wb") as f:
+                        pickle.dump(Entity.player.player_izabrana_slika, f)
+                    play()
         prozor.fill((0,0,0))
         prozor.blit(player_picture_1 ,(64, 99) )
         prozor.blit(player_picture_2 , (300 , 85))
@@ -101,6 +135,9 @@ def choose_character():
             prozor.blit(Text_Files.texts.character3_stat_damage , (570 , 350))
             prozor.blit(Text_Files.texts.character3_stat_defense, (570, 390))
             prozor.blit(Text_Files.texts.character3_stat_stamina, (570, 430))
+        nacrtaj_dugme_bez_centiranja(UI.Buttons.choose_player1)
+        nacrtaj_dugme_bez_centiranja(UI.Buttons.choose_player2)
+        nacrtaj_dugme_bez_centiranja(UI.Buttons.choose_player3)
         global trenutno_stanje
         trenutno_stanje = GameStates.CHOOSE_CHARACTER
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
@@ -170,6 +207,7 @@ def play():
         from Entity import player
         global trenutno_stanje
         trenutno_stanje = GameStates.PLAY
+        prozor.blit(igrac.slika , (100,300))
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
             pickle.dump(trenutno_stanje, f)
         pygame.display.flip()
