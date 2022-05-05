@@ -30,6 +30,7 @@ else:
     pass
 if path.exists("Saves/player_picture.pickle"):
     with open("Saves/player_picture.pickle", "rb") as f:
+        Entity.player.player_izabrana_slika = pickle.load(f)
         if Entity.player.player_izabrana_slika == "Knight":
             igrac.slika = player_picture_1
         if Entity.player.player_izabrana_slika == "Pirate":
