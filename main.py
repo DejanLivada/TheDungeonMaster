@@ -4,7 +4,7 @@ import sys
 import pygame
 import pickle
 
-import Entity.player
+from Entity.player import Player, player_izabrana_slika
 from Text_Files.texts import *
 import UI.Buttons
 from UI import Buttons
@@ -13,6 +13,7 @@ from os import path
 from Entity import player
 from pygame.math import Vector2
 from Other.game_states import GameStates
+from Entity.platform import Platform
 
 # -------------------------PLAYER SLIKE I DEFINISANJE PLAYERA------------------
 player_picture_1 = pygame.image.load("pictures/player1.png")
@@ -24,6 +25,11 @@ player_picture_3 = pygame.transform.scale(player_picture_3 , (350,200))
 world_background  = pygame.image.load("pictures/background.jpg")
 world_background = pygame.transform.scale(world_background , (800 , 600))
 
+platforms = [
+    Platform(pygame.Rect(600, 500, 60, 30)),
+    Platform(pygame.Rect(400, 350, 100, 30)),
+    Platform(pygame.Rect(200, 250, 100, 30)),
+]
 
 def resize_player(image , width , height):
     igrac.slika = pygame.transform.scale(image ,(width,height))
@@ -31,7 +37,7 @@ def resize_player(image , width , height):
 
 
 
-igrac = Entity.player.Player(None , 100 , Entity.player.player_izabrana_slika , Vector2(100,300)  , Vector2(5,5))
+igrac = Player(None , 100 , player_izabrana_slika , Vector2(100,300)  , Vector2(5,5))
 if path.exists("Saves/player_name.pickle"):
     with open("Saves/player_name.pickle", "rb") as f:
         igrac.name = pickle.load(f)
@@ -42,12 +48,12 @@ else:
     pass
 if path.exists("Saves/player_picture.pickle"):
     with open("Saves/player_picture.pickle", "rb") as f:
-        Entity.player.player_izabrana_slika = pickle.load(f)
-        if Entity.player.player_izabrana_slika == "Knight":
+        player_izabrana_slika = pickle.load(f)
+        if player_izabrana_slika == "Knight":
             igrac.slika = player_picture_1
-        if Entity.player.player_izabrana_slika == "Pirate":
+        if player_izabrana_slika == "Pirate":
             igrac.slika = player_picture_2
-        if Entity.player.player_izabrana_slika == "Furry":
+        if player_izabrana_slika == "Furry":
             igrac.slika = player_picture_3
 else:
     pass
@@ -113,21 +119,21 @@ def choose_character():                     #PLAYER CHOOSING HIS CHARACTER
             if dogadjaj.type == pygame.MOUSEBUTTONDOWN:
                 if UI.Buttons.choose_player1.rect.collidepoint(dogadjaj.pos):
                     igrac.slika = player_picture_1
-                    Entity.player.player_izabrana_slika = "Knight"
+                    player_izabrana_slika = "Knight"
                     with open("Saves/player_picture.pickle", "wb") as f:
-                        pickle.dump(Entity.player.player_izabrana_slika, f)
+                        pickle.dump(player_izabrana_slika, f)
                     welcome_screen()
                 if UI.Buttons.choose_player2.rect.collidepoint(dogadjaj.pos):
                     igrac.slika = player_picture_2
-                    Entity.player.player_izabrana_slika = "Pirate"
+                    player_izabrana_slika = "Pirate"
                     with open("Saves/player_picture.pickle", "wb") as f:
-                        pickle.dump(Entity.player.player_izabrana_slika, f)
+                        pickle.dump(player_izabrana_slika, f)
                     welcome_screen()
                 if UI.Buttons.choose_player3.rect.collidepoint(dogadjaj.pos):
                     igrac.slika = player_picture_3
-                    Entity.player.player_izabrana_slika = "Furry"
+                    player_izabrana_slika = "Furry"
                     with open("Saves/player_picture.pickle", "wb") as f:
-                        pickle.dump(Entity.player.player_izabrana_slika, f)
+                        pickle.dump(player_izabrana_slika, f)
                     welcome_screen()
         prozor.fill((0,0,0))
         prozor.blit(player_picture_1 ,(64, 99) )
@@ -224,9 +230,10 @@ def welcome_screen():
         prozor.blit(world_background , (0,0))
         resize_player(igrac.slika , 100,100)
         prozor.blit(igrac.slika, igrac.pozicija)
-
+        for pl in platforms:
+            pl.draw(prozor)
         prozor.blit(welcome_text,(0,0))
-        igrac.move()
+        igrac.update(platforms)
 
 
 
