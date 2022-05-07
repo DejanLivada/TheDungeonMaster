@@ -21,7 +21,15 @@ player_picture_2 = pygame.transform.smoothscale(player_picture_2 , (200,200))
 player_picture_3 = pygame.image.load("player_pictures/player3.jpg")
 player_picture_3 = pygame.transform.scale(player_picture_3 , (350,200))
 
-igrac = Entity.player.Player(None , 100 , Entity.player.player_izabrana_slika)
+
+
+def resize_player(image , width , height):
+    igrac.slika = pygame.transform.scale(image ,(width,height))
+
+
+
+
+igrac = Entity.player.Player(None , 100 , Entity.player.player_izabrana_slika , (100,300)  , 5)
 if path.exists("Saves/player_name.pickle"):
     with open("Saves/player_name.pickle", "rb") as f:
         igrac.name = pickle.load(f)
@@ -78,7 +86,7 @@ def main_menu():
                         if trenutno_stanje == GameStates.CHOOSE_NAME:
                             choose_name()
                         if trenutno_stanje == GameStates.PLAY:
-                            play()
+                            welcome_screen()
                     else:
                         choose_name()
 
@@ -104,19 +112,19 @@ def choose_character():                     #PLAYER CHOOSING HIS CHARACTER
                     Entity.player.player_izabrana_slika = "Knight"
                     with open("Saves/player_picture.pickle", "wb") as f:
                         pickle.dump(Entity.player.player_izabrana_slika, f)
-                    play()
+                    welcome_screen()
                 if UI.Buttons.choose_player2.rect.collidepoint(dogadjaj.pos):
                     igrac.slika = player_picture_2
                     Entity.player.player_izabrana_slika = "Pirate"
                     with open("Saves/player_picture.pickle", "wb") as f:
                         pickle.dump(Entity.player.player_izabrana_slika, f)
-                    play()
+                    welcome_screen()
                 if UI.Buttons.choose_player3.rect.collidepoint(dogadjaj.pos):
                     igrac.slika = player_picture_3
                     Entity.player.player_izabrana_slika = "Furry"
                     with open("Saves/player_picture.pickle", "wb") as f:
                         pickle.dump(Entity.player.player_izabrana_slika, f)
-                    play()
+                    welcome_screen()
         prozor.fill((0,0,0))
         prozor.blit(player_picture_1 ,(64, 99) )
         prozor.blit(player_picture_2 , (300 , 85))
@@ -198,7 +206,7 @@ def credits():
         sat.tick(30)
 
 
-def play():
+def welcome_screen():
     program_radi = True
     while program_radi:
         for dogadjaj in pygame.event.get():
@@ -208,7 +216,12 @@ def play():
         from Entity import player
         global trenutno_stanje
         trenutno_stanje = GameStates.PLAY
-        prozor.blit(igrac.slika , (100,300))
+
+        resize_player(igrac.slika , 100,100)
+        prozor.blit(igrac.slika, igrac.pozicija)
+        prozor.blit(Text_Files.texts.welcome_to_the_game_text,(0,0))
+
+
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
             pickle.dump(trenutno_stanje, f)
         pygame.display.flip()

@@ -27,3 +27,4 @@ character2_stat_stamina = credits_font.render("Stamina : 40" , True , (255,255,2
 character3_stat_damage = credits_font.render("Damage : 30" , True , (255,255,255))
 character3_stat_defense = credits_font.render("Defense : 10" , True , (255,255,255))
 character3_stat_stamina = credits_font.render("Stamina : 60" , True , (255,255,255))
+welcome_to_the_game_text = welcome_font.render("Welcome to TDM" ,True ,  pygame.Color("black") )
