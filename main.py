@@ -11,6 +11,7 @@ from UI import Buttons
 import player_pictures
 from os import path
 from Entity import player
+from pygame.math import Vector2
 from Other.game_states import GameStates
 
 # -------------------------PLAYER SLIKE I DEFINISANJE PLAYERA------------------
@@ -29,7 +30,7 @@ def resize_player(image , width , height):
 
 
 
-igrac = Entity.player.Player(None , 100 , Entity.player.player_izabrana_slika , (100,300)  , 5)
+igrac = Entity.player.Player(None , 100 , Entity.player.player_izabrana_slika , Vector2(100,300)  , Vector2(5,5))
 if path.exists("Saves/player_name.pickle"):
     with open("Saves/player_name.pickle", "rb") as f:
         igrac.name = pickle.load(f)
@@ -220,7 +221,7 @@ def welcome_screen():
         resize_player(igrac.slika , 100,100)
         prozor.blit(igrac.slika, igrac.pozicija)
         prozor.blit(Text_Files.texts.welcome_to_the_game_text,(0,0))
-
+        igrac.move()
 
         with open("Saves/trenutno_stanje.pickle", "wb") as f:
             pickle.dump(trenutno_stanje, f)
