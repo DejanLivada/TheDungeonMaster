@@ -136,15 +136,15 @@ def choose_character():                     #PLAYER CHOOSING HIS CHARACTER
         prozor.blit(character1_text , (100 , 50))
         prozor.blit(character2_text, (350, 50))
         prozor.blit(character3_text, (620, 50))
-        if player_picture_1.get_rect().collidepoint(pygame.mouse.get_pos()):
+        if player_picture_1.get_rect().move((64, 99)).collidepoint(pygame.mouse.get_pos()):
             prozor.blit(character1_stat_damage , (50 , 350))
             prozor.blit(character1_stat_defense, (50, 390))
             prozor.blit(character1_stat_stamina, (50, 430))
-        if player_picture_2.get_rect().collidepoint(pygame.mouse.get_pos()):
+        if player_picture_2.get_rect().move((300 , 85)).collidepoint(pygame.mouse.get_pos()):
             prozor.blit(character2_stat_damage , (300 , 350))
             prozor.blit(character2_stat_defense, (300, 390))
             prozor.blit(character2_stat_stamina, (300, 430))
-        if player_picture_3.get_rect().collidepoint(pygame.mouse.get_pos()):
+        if player_picture_3.get_rect().move((500 , 99)).collidepoint(pygame.mouse.get_pos()):
             prozor.blit(character3_stat_damage , (570 , 350))
             prozor.blit(character3_stat_defense, (570, 390))
             prozor.blit(character3_stat_stamina, (570, 430))
