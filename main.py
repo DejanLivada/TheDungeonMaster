@@ -24,7 +24,8 @@ player_picture_3 = pygame.image.load("pictures/player3.jpg")
 player_picture_3 = pygame.transform.scale(player_picture_3 , (350,200))
 world_background  = pygame.image.load("pictures/background.jpg")
 world_background = pygame.transform.scale(world_background , (800 , 600))
-
+text_box = pygame.image.load("pictures/text box.png")
+text_box = pygame.transform.scale(text_box , (600 , 220))
 platforms = [
     Platform(pygame.Rect(600, 500, 60, 30)),
     Platform(pygame.Rect(400, 350, 100, 30)),
@@ -230,6 +231,7 @@ def welcome_screen():
         prozor.blit(world_background , (0,0))
         resize_player(igrac.slika , 100,100)
         prozor.blit(igrac.slika, igrac.pozicija)
+        prozor.blit(text_box , (0, 300))
         for pl in platforms:
             pl.draw(prozor)
         prozor.blit(welcome_text,(0,0))

@@ -40,10 +40,10 @@ class Player:
         dugmici = pygame.key.get_pressed()
 
         if not self.on_the_floor(platforms):
-            print("U VAZDUHU")
+            #print("U VAZDUHU")
             self.vertikalna_brzina += 0.3
         else:
-            print("NA PODU")
+            #print("NA PODU")
             self.vertikalna_brzina = 0
             if dugmici[pygame.K_w]:
                 self.vertikalna_brzina = -10
